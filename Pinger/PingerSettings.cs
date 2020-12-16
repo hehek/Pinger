@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Pinger
 {
+    
     public class PingerSettings
     {       
         public string Protocol { get; set; }

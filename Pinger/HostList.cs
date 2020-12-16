@@ -8,6 +8,10 @@ namespace Pinger
     {
         public List<PingerSettings> hostList;
 
+        public HostList(PingerSettings ps)
+        {
+            hostList.Add(ps);
+        }
 
     }
 }
