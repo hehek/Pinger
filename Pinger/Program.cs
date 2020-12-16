@@ -13,7 +13,7 @@ namespace Pinger
         {
             ILoggerFactory loggerFactory = new LoggerFactory()
                                                .AddFile(Path.Combine(Directory.GetCurrentDirectory(),
-                                                        "logger.txt"));                                          .AddConsole();
+                                                        "logger.txt"));                           
             ILogger logger = loggerFactory.CreateLogger<Program>();
             var configuration = new ConfigurationBuilder()
                         .SetBasePath(Directory.GetCurrentDirectory())
