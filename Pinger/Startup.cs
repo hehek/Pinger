@@ -5,7 +5,6 @@ namespace Pinger
 {
     public class Startup
     {
-
-        
+      
     }
-}
+ }

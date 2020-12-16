@@ -1,16 +1,5 @@
 {
-  "compilerOptions": {
-    "noImplicitAny": false,
-    "noEmitOnError": true,
-    "removeComments": false,
-    "sourceMap": true,
-    "target": "es5"
-  },
-  "exclude": [
-    "node_modules",
-    "wwwroot"
-  ],
-  "Hosts": [
+   "Hosts": [
     {
       "Protocol": "HTTP",
       "Host": "dex-it.ru",
@@ -21,7 +10,7 @@
       "Protocol": "TCP",
       "Host": "dex-it.ru",
       "Timeout": 300
-    }
+    },
     {
       "Protocol": "ICMP",
       "Host": "dex-it.ru",

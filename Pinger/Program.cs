@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
+using System.IO;
 
 namespace Pinger
 {
@@ -8,13 +9,11 @@ namespace Pinger
         static void Main(string[] args)
         {
 
-            IConfiguration config = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json", true, true)
-            .Build();          
-
-            var hostList = config.GetSection("Hosts").Get<HostList>();
-           
+            var configuration = new ConfigurationBuilder().AddJsonFile("Settings.json").Build();
+            var hostList = configuration.GetSection("Hosts").Get<HostList>();
+            
             Console.ReadLine();
         }
+
     }
 }
