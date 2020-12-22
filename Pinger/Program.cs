@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
+using Microsoft.AspNetCore.Hosting;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.AspNetCore.Hosting.Internal;
 
 namespace Pinger
 {
@@ -11,9 +14,8 @@ namespace Pinger
     {
         static void Main(string[] args)
         {
-            ILoggerFactory loggerFactory = new LoggerFactory()
-                                               .AddFile(Path.Combine(Directory.GetCurrentDirectory(),
-                                                        "logger.txt"));                           
+            CreateHostBuilder(args).Build().Run();
+            ILoggerFactory loggerFactory = new LoggerFactory();                                              
             ILogger logger = loggerFactory.CreateLogger<Program>();
             var configuration = new ConfigurationBuilder()
                         .SetBasePath(Directory.GetCurrentDirectory())
@@ -30,6 +32,13 @@ namespace Pinger
             }            
             Console.ReadLine();
         }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+       Host.CreateDefaultBuilder(args)
+           .ConfigureWebHostDefaults(webBuilder =>
+           {
+               webBuilder.UseStartup<Startup>();
+           });
 
     }
 }
