@@ -48,7 +48,7 @@ namespace Pinger
                         {
                             LogLevel = LogLevel.Error,
                             Path  = Path.Combine(Directory.GetCurrentDirectory(),
-                                                        "logger.txt");
+                                                        "logger.txt")
                         }))
                 .AddFileLogger())
                 .ConfigureServices((hostContext, services) =>

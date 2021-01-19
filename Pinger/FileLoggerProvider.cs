@@ -11,7 +11,7 @@ namespace Pinger
         private readonly FileLoggerConfiguration _config;
         private readonly ConcurrentDictionary<string, FileLogger> _loggers =
             new ConcurrentDictionary<string, FileLogger>();
-;
+
         public FileLoggerProvider(FileLoggerConfiguration config)
         {
             config = _config;
