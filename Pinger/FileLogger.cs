@@ -8,20 +8,17 @@ namespace Pinger
 {
     public class FileLogger : ILogger
     {
-        private string filePath;
         private static object _lock = new object();
-        public FileLogger(string path)
+        private readonly FileLoggerConfiguration _config;
+        public FileLogger(FileLoggerConfiguration config)
         {
-            filePath = path;
+            _config = config;
         }
-        public IDisposable BeginScope<TState>(TState state)
-        {
-            return null;
-        }
+        public IDisposable BeginScope<TState>(TState state) => default;
 
         public bool IsEnabled(LogLevel logLevel)
-        {            
-            return true;
+        {
+            return logLevel == _config.LogLevel; 
         }
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
@@ -30,7 +27,7 @@ namespace Pinger
             {
                 lock (_lock)
                 {
-                    File.AppendAllText(filePath, formatter(state, exception) + Environment.NewLine);
+                    File.AppendAllText(_config.Path, formatter(state, exception) + Environment.NewLine);
                 }
             }
         }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,18 +8,19 @@ namespace Pinger
 {
     public class FileLoggerProvider : ILoggerProvider
     {
-        private readonly string path;
-        public FileLoggerProvider(string _path)
+        private readonly FileLoggerConfiguration _config;
+        private readonly ConcurrentDictionary<string, FileLogger> _loggers =
+            new ConcurrentDictionary<string, FileLogger>();
+;
+        public FileLoggerProvider(FileLoggerConfiguration config)
         {
-            path = _path;
+            config = _config;
         }
         public ILogger CreateLogger(string categoryName)
         {
-            return new FileLogger(path);
+            return new FileLogger(_config);
         }
 
-        public void Dispose()
-        {
-        }
+        public void Dispose() => _loggers.Clear();
     }
 }
