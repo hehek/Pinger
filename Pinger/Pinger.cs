@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Pinger
 {
-    internal class PingerController
+    internal class Pinger
 
     {
         private readonly PingerSettings PingerSettings;
@@ -16,7 +16,7 @@ namespace Pinger
         private CancellationTokenSource _cancelTokenSource;
         private CancellationToken _token;
 
-        public PingerController(ILogger logger, PingerSettings pingerSettings)
+        public Pinger(ILogger logger, PingerSettings pingerSettings)
         {
             _logger = logger;
             PingerSettings = pingerSettings;

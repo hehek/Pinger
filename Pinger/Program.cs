@@ -55,7 +55,7 @@ namespace Pinger
                 .AddFileLogger().AddConsole())            
                 .ConfigureServices((hostContext, services) =>
                  {
-                     services.AddTransient<FileLogger>();
+                     services.AddTransient<Pinger>();
                  });
     }
 }
