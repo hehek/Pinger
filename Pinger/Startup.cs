@@ -29,8 +29,7 @@ namespace Pinger
             {
                 builder.AddConsole();               
             });
-            loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(),
-                                                        "logger.txt"));
+            
            
         }
 

@@ -16,9 +16,14 @@ namespace Pinger
             
             CreateHostBuilder(args).Build().Run();
             ILoggerFactory loggerFactory = new LoggerFactory();
-            ILogger logger = loggerFactory.CreateLogger<Program>();      
+            ILogger logger = loggerFactory.CreateLogger<Program>();
 
-           
+            ILogger fileLogger = new FileLogger(new FileLoggerConfiguration {
+                LogLevel = LogLevel.Error,
+                Path = Path.Combine(Directory.GetCurrentDirectory(),
+                                                        "logger.txt")
+            });
+                       
 
             var configuration = new ConfigurationBuilder()
                        .SetBasePath(Directory.GetCurrentDirectory())
@@ -29,6 +34,11 @@ namespace Pinger
 
             foreach (var hl in hostList)
             {
+                fileLogger.LogInformation(hl.Host + "\n"
+                                           + hl.Protocol + "\n"
+                                           + hl.Status + "\n"
+                                           + hl.Timeout, "arg"
+                                           + DateTime.Today);
                 logger.LogInformation(hl.Host + "\n"
                                            + hl.Protocol + "\n"
                                            + hl.Status + "\n"
@@ -42,17 +52,10 @@ namespace Pinger
              Host.CreateDefaultBuilder(args)
             .ConfigureLogging(builder =>
                 builder.ClearProviders()
-                .AddProvider(
-                    new FileLoggerProvider(
-                        new FileLoggerConfiguration
-                        {
-                            LogLevel = LogLevel.Error,
-                            Path  = Path.Combine(Directory.GetCurrentDirectory(),
-                                                        "logger.txt")
-                        }))
-                .AddFileLogger())
+                .AddFileLogger().AddConsole())            
                 .ConfigureServices((hostContext, services) =>
-                 {                     
+                 {
+                     services.AddTransient<FileLogger>();
                  });
     }
 }

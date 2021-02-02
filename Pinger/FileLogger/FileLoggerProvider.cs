@@ -14,7 +14,7 @@ namespace Pinger
 
         public FileLoggerProvider(FileLoggerConfiguration config)
         {
-            config = _config;
+            _config = config;
         }
         public ILogger CreateLogger(string categoryName)
         {
