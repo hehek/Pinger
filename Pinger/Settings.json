@@ -1,5 +1,5 @@
 {
-   "Hosts": [
+  "Hosts": [
     {
       "Protocol": "HTTP",
       "Host": "dex-it.ru",

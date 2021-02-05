@@ -15,47 +15,29 @@ namespace Pinger
         {
             
             CreateHostBuilder(args).Build().Run();
-            ILoggerFactory loggerFactory = new LoggerFactory();
-            ILogger logger = loggerFactory.CreateLogger<Program>();
-
-            ILogger fileLogger = new FileLogger(new FileLoggerConfiguration {
-                LogLevel = LogLevel.Error,
-                Path = Path.Combine(Directory.GetCurrentDirectory(),
-                                                        "logger.txt")
-            });
-                       
-
-            var configuration = new ConfigurationBuilder()
-                       .SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("Settings.json")
-                       .Build();
-
-            var hostList = configuration.GetSection("Hosts").Get<List<PingerSettings>>();
-
-            foreach (var hl in hostList)
-            {
-                fileLogger.LogInformation(hl.Host + "\n"
-                                           + hl.Protocol + "\n"
-                                           + hl.Status + "\n"
-                                           + hl.Timeout, "arg"
-                                           + DateTime.Today);
-                logger.LogInformation(hl.Host + "\n"
-                                           + hl.Protocol + "\n"
-                                           + hl.Status + "\n"
-                                           + hl.Timeout, "arg");
-
-            }
-            Console.ReadLine();
+            
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
-             Host.CreateDefaultBuilder(args)
+             Host.CreateDefaultBuilder(args).ConfigureHostConfiguration(configHost =>
+             {
+                 configHost.SetBasePath(Directory.GetCurrentDirectory());
+                 configHost.AddJsonFile("Settings.json");
+             })
             .ConfigureLogging(builder =>
                 builder.ClearProviders()
-                .AddFileLogger().AddConsole())            
+                .AddFileLogger(new FileLoggerConfiguration
+                    {
+                        LogLevel = LogLevel.None,
+                        Path = "log.txt"
+                    }).AddConsole())            
                 .ConfigureServices((hostContext, services) =>
                  {
                      services.AddTransient<Pinger>();
+                     services.AddTransient<FileLogger>();
+                     services.AddHostedService<Start>();
                  });
+
+        
     }
 }
