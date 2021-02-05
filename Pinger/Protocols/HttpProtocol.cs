@@ -7,24 +7,24 @@ namespace Pinger.Protocols
 {
     public class HTTPProtocol : Protocol
     {
-        private string TargetHost { get; set; }
+        private string targetHost { get; set; }
+        private readonly HttpStatusCode ExpectedStatus;
 
-        public HTTPProtocol(string targetHost)
-        {
-          
-            TargetHost = targetHost;
+        public HTTPProtocol(PingerSettings pingerSettings)
+        {          
+            targetHost = pingerSettings.Host;
+            ExpectedStatus = pingerSettings.Status;
         }
 
         public override bool PingHost()
         {
             try
             {
-                var request = (HttpWebRequest)WebRequest.Create(TargetHost);
+                var request = (HttpWebRequest)WebRequest.Create(targetHost);
                 request.Timeout = 3000;
                 request.AllowAutoRedirect = false;
-
                 using var response = (HttpWebResponse)request.GetResponse();
-                return response.StatusCode == HttpStatusCode.OK;
+                return response.StatusCode == ExpectedStatus;
             }
             catch (UriFormatException)
             {

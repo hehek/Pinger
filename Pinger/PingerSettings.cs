@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 
 namespace Pinger
@@ -10,6 +11,6 @@ namespace Pinger
         public string Protocol { get; set; }
         public string Host { get; set; }
         public int Timeout { get; set; }
-        public int Status { get; set; }        
+        public HttpStatusCode Status { get; set; }        
     }
 }

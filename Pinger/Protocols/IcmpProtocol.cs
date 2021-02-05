@@ -9,9 +9,9 @@ namespace Pinger.Protocols
     {
         private string TargetHost { get; }
 
-        public ICMPProtocol(string targetHost)
+        public ICMPProtocol(PingerSettings pingerSettings)
         {
-            TargetHost = targetHost;            
+            TargetHost =  pingerSettings.Host;            
         }
 
         public override bool PingHost()

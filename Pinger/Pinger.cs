@@ -10,7 +10,7 @@ namespace Pinger
     internal class Pinger
 
     {
-        private readonly PingerSettings PingerSettings;
+        private readonly PingerSettings _pingerSettings;
         private readonly ILogger _logger;
         private PingerStatus _status = PingerStatus.Stopped;
         private CancellationTokenSource _cancelTokenSource;
@@ -19,7 +19,7 @@ namespace Pinger
         public Pinger(ILogger logger, PingerSettings pingerSettings)
         {
             _logger = logger;
-            PingerSettings = pingerSettings;
+            _pingerSettings = pingerSettings;
         }
 
         public void Start()
@@ -41,8 +41,9 @@ namespace Pinger
         {
             while (_status == PingerStatus.Started)
             {
-                _logger.LogTrace("");
-                Thread.Sleep(PingerSettings.Timeout);
+                //_logger.LogTrace(""); 
+                //TODO: Ping host and log
+                Thread.Sleep(_pingerSettings.Timeout);
             }
         }
     }

@@ -10,10 +10,10 @@ namespace Pinger.Protocols
         private string TargetHost { get; set; }
         private int TargetPort { get; set; }
 
-        public TCPProtocol(string targetHost)
+        public TCPProtocol(PingerSettings pingerSettings)
         {
-            this.TargetHost = targetHost.Split(':')[0];
-            TargetPort = int.Parse(targetHost.Split(':')[1]);
+            TargetHost = pingerSettings.Host;
+            TargetPort = 80;
         }
         public override bool PingHost()
         {
