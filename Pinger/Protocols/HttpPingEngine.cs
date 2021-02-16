@@ -5,19 +5,17 @@ using System.Text;
 
 namespace Pinger.Protocols
 {
-    public class HTTPProtocol : Protocol
+    internal class HttpPingEngine
     {
         private string targetHost { get; set; }
-        private readonly HttpStatusCode ExpectedStatus;
+        private HttpStatusCode ExpectedStatus;
 
-        public HTTPProtocol(PingerSettings pingerSettings)
-        {          
+        public HttpPingEngine() { }
+
+        public bool Ping(HttpPingSettings pingerSettings)
+        {
             targetHost = pingerSettings.Host;
             ExpectedStatus = pingerSettings.Status;
-        }
-
-        public override bool PingHost()
-        {
             try
             {
                 var request = (HttpWebRequest)WebRequest.Create(targetHost);
@@ -35,5 +33,7 @@ namespace Pinger.Protocols
                 return false;
             }
         }
+
+
     }
 }

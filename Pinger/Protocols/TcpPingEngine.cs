@@ -5,18 +5,16 @@ using System.Text;
 
 namespace Pinger.Protocols
 {
-    public class TCPProtocol : Protocol
+    public class TcpPingEngine
     {
         private string TargetHost { get; set; }
         private int TargetPort { get; set; }
 
-        public TCPProtocol(PingerSettings pingerSettings)
+        public TcpPingEngine() { }
+        public bool Ping(TcpPingSettings pingerSettings)
         {
             TargetHost = pingerSettings.Host;
-            TargetPort = 80;
-        }
-        public override bool PingHost()
-        {
+            TargetPort = pingerSettings.Port;
             bool conStatus;
             var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
             {
@@ -47,5 +45,7 @@ namespace Pinger.Protocols
             return conStatus;
 
         }
+
+
     }
 }

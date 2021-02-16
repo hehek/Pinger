@@ -5,17 +5,14 @@ using System.Text;
 
 namespace Pinger.Protocols
 {
-    public class ICMPProtocol : Protocol
+    public class IcmpPingEngine
     {
-        private string TargetHost { get; }
+        private string TargetHost { get; set; }
 
-        public ICMPProtocol(PingerSettings pingerSettings)
-        {
-            TargetHost =  pingerSettings.Host;            
-        }
 
-        public override bool PingHost()
+        public bool Ping(IcmpPingSettings pingerSettings)
         {
+            TargetHost = pingerSettings.Host;
             var pinger = new Ping();
             try
             {
@@ -34,5 +31,7 @@ namespace Pinger.Protocols
             }
 
         }
+
+
     }
 }

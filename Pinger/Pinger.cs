@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Pinger.Protocols;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,26 +9,35 @@ using System.Threading.Tasks;
 
 namespace Pinger
 {
-    internal class Pinger
+
+    internal class Pinger<TPingSettings> where TPingSettings : BasePingSettings
 
     {
-        private readonly PingerSettings _pingerSettings;
+        private readonly IHostApplicationLifetime _applicationLifetime;
         private readonly ILogger _logger;
+        private readonly PingEngine _engine;
         private PingerStatus _status = PingerStatus.Stopped;
         private CancellationTokenSource _cancelTokenSource;
         private CancellationToken _token;
+        private TPingSettings _pingSettings;
 
-        public Pinger(ILogger logger, PingerSettings pingerSettings)
+        public Pinger(IHostApplicationLifetime applicationLifetime, PingEngine engine)
         {
-            _logger = logger;
-            _pingerSettings = pingerSettings;
+            _applicationLifetime = applicationLifetime;
+
+            _engine = engine;
         }
 
-        public void Start()
+        public void Start(TPingSettings pingSettings)
         {
+            _pingSettings = pingSettings ?? throw new ArgumentNullException(nameof(pingSettings));
+
             _cancelTokenSource = new CancellationTokenSource();
             _token = _cancelTokenSource.Token;
-            var inner = Task.Factory.StartNew(IntervalPing, _token);
+
+            _token = _applicationLifetime.ApplicationStopping;
+
+            var inner = Task.Factory.StartNew(() => IntervalPing(), _token);
             _status = PingerStatus.Started;
         }
 
@@ -43,7 +54,9 @@ namespace Pinger
             {
                 //_logger.LogTrace(""); 
                 //TODO: Ping host and log
-                Thread.Sleep(_pingerSettings.Timeout);
+                _engine.Ping(_pingSettings);
+
+                Thread.Sleep(_pingSettings.Timeout);
             }
         }
     }

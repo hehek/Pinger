@@ -5,41 +5,59 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Pinger
 {
     internal class Start : IHostedService
     {
         private readonly ILogger<Start> _logger;
-        private readonly IConfiguration _configuration;
+        private List<BasePingSettings> _pingSettingsList;
+        private readonly IServiceProvider _serviceProvider;
 
-        public Start(ILogger<Start> logger, IConfiguration configuration)
+        public Start(ILogger<Start> logger, List<BasePingSettings> pingSettingsList, IServiceProvider serviceProvider)
         {
             _logger = logger;
-            _configuration = configuration;
+            _pingSettingsList = pingSettingsList;
+            _serviceProvider = serviceProvider;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            var hostList = _configuration.GetSection("Hosts").Get<List<PingerSettings>>();
+            foreach (var hl in _pingSettingsList)
+            {
 
-            foreach (var hl in hostList)
-            {               
-                _logger.LogInformation(hl.Host + "\n"
-                                           + hl.Protocol + "\n"
-                                           + hl.Status + "\n"
-                                           + hl.Timeout);
+
+                if (hl is HttpPingSettings ps)
+                {
+                    _logger.LogInformation(ps.Host + "\n"
+                                                   + ps.Protocol + "\n"
+                                                   + ps.Status + "\n"
+                                                   + ps.Timeout);
+
+                    var pinger = _serviceProvider.GetService<Pinger<HttpPingSettings>>();
+                    pinger.Start(ps);
+
+                }
+                else
+                {
+                    _logger.LogInformation(hl.Host + "\n"
+                                                   + hl.Protocol + "\n"
+                                                   + hl.Timeout);
+                }
+
+
 
             }
-            Console.ReadLine();
+
             return Task.CompletedTask;
         }
-      
+
         public Task StopAsync(CancellationToken cancellationToken)
         {
             _logger.Log(LogLevel.Information, "Service stopped.");
             return Task.CompletedTask;
         }
-
     }
+
 }
