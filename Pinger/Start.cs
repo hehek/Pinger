@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Pinger.Protocols;
 
 namespace Pinger
 {
@@ -28,26 +29,33 @@ namespace Pinger
             {
 
 
-                if (hl is HttpPingSettings ps)
+                if (hl is HttpPingSettings httpPS)
                 {
-                    _logger.LogInformation(ps.Host + "\n"
-                                                   + ps.Protocol + "\n"
-                                                   + ps.Status + "\n"
-                                                   + ps.Timeout);
-
+                    _logger.LogInformation(httpPS.Host + "\n"
+                                                   + httpPS.Protocol + "\n"
+                                                   + httpPS.Status + "\n"
+                                                   + httpPS.Timeout);
                     var pinger = _serviceProvider.GetService<Pinger<HttpPingSettings>>();
-                    pinger.Start(ps);
+                    pinger.Start(httpPS);
 
                 }
-                else
+                else if (hl is TcpPingSettings tcpPS)
                 {
-                    _logger.LogInformation(hl.Host + "\n"
-                                                   + hl.Protocol + "\n"
-                                                   + hl.Timeout);
+                    _logger.LogInformation(tcpPS.Host + "\n"
+                                                   + tcpPS.Protocol + "\n"
+                                                   + tcpPS.Port + "\n"
+                                                   + tcpPS.Timeout);
+                    var pinger = _serviceProvider.GetService<Pinger<TcpPingSettings>>();
+                    pinger.Start(tcpPS);
                 }
-
-
-
+                else if (hl is IcmpPingSettings icmpPS)
+                {
+                    _logger.LogInformation(icmpPS.Host + "\n"
+                                                   + icmpPS.Protocol + "\n"
+                                                   + icmpPS.Timeout);
+                    var pinger = _serviceProvider.GetService<Pinger<IcmpPingSettings>>();
+                    pinger.Start(icmpPS);
+                }
             }
 
             return Task.CompletedTask;

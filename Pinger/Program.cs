@@ -55,9 +55,9 @@ namespace Pinger
 
                     services.AddSingleton(list);
                     services.AddSingleton(mapper);
-                    services.AddTransient<Pinger<HttpPingSettings>>();
-                    services.AddTransient<Pinger<TcpPingSettings>>();
-                    services.AddTransient<Pinger<IcmpPingSettings>>();
+                    services.AddScoped<Pinger<HttpPingSettings>>();
+                    services.AddScoped<Pinger<TcpPingSettings>>();
+                    services.AddScoped<Pinger<IcmpPingSettings>>();
                     services.AddTransient<FileLogger>();
                     services.AddHostedService<Start>();
                 });
