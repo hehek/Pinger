@@ -29,14 +29,14 @@ namespace Pinger
             {
 
 
-                if (hl is HttpPingSettings httpPS)
+                if (hl is HttpPingSettings ps)
                 {
-                    _logger.LogInformation(httpPS.Host + "\n"
-                                                   + httpPS.Protocol + "\n"
-                                                   + httpPS.Status + "\n"
-                                                   + httpPS.Timeout);
+                    _logger.LogInformation(ps.Host + "\n"
+                                                   + ps.Protocol + "\n"
+                                                   + ps.Status + "\n"
+                                                   + ps.Timeout);
                     var pinger = _serviceProvider.GetService<Pinger<HttpPingSettings>>();
-                    pinger.Start(httpPS);
+                    pinger.Start(ps);
 
                 }
                 else if (hl is TcpPingSettings tcpPS)
@@ -56,6 +56,7 @@ namespace Pinger
                     var pinger = _serviceProvider.GetService<Pinger<IcmpPingSettings>>();
                     pinger.Start(icmpPS);
                 }
+
             }
 
             return Task.CompletedTask;

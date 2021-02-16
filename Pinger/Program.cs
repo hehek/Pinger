@@ -52,12 +52,14 @@ namespace Pinger
                             list.Add(mapper.Map<PingerSettings, HttpPingSettings>(hl));
                         }
                     }
-
+                   
+                   
                     services.AddSingleton(list);
                     services.AddSingleton(mapper);
                     services.AddScoped<Pinger<HttpPingSettings>>();
                     services.AddScoped<Pinger<TcpPingSettings>>();
                     services.AddScoped<Pinger<IcmpPingSettings>>();
+                    services.AddScoped<PingEngine>();
                     services.AddTransient<FileLogger>();
                     services.AddHostedService<Start>();
                 });
