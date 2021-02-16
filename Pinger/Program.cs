@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Pinger.Protocols;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -57,7 +58,6 @@ namespace Pinger
                     services.AddTransient<Pinger<HttpPingSettings>>();
                     services.AddTransient<Pinger<TcpPingSettings>>();
                     services.AddTransient<Pinger<IcmpPingSettings>>();
-
                     services.AddTransient<FileLogger>();
                     services.AddHostedService<Start>();
                 });

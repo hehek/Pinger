@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AutoMapper.Internal;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,30 +14,27 @@ namespace Pinger.Protocols
 
         }
 
-        internal void Ping<TPingSettings>(TPingSettings pingSettings) where TPingSettings : BasePingSettings
+        internal bool Ping<T>(BasePingSettings pingSettings)
         {
-            throw new NotImplementedException();
+            if (pingSettings is HttpPingSettings httpPS)
+            {
+                HttpPingEngine httpPingEngine = new HttpPingEngine();
+                return httpPingEngine.Ping(httpPS);
+            }
+            else if(pingSettings is TcpPingSettings tcpPS)
+            {
+                TcpPingEngine tcpPingEngine = new TcpPingEngine();
+                return tcpPingEngine.Ping(tcpPS);
+            }
+            else if(pingSettings is IcmpPingSettings icmpPS)
+            {
+                IcmpPingEngine icmpPingEngine = new IcmpPingEngine();
+                return icmpPingEngine.Ping(icmpPS);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
-
-        public bool Ping(HttpPingSettings pingerSettings)
-        {
-            HttpPingEngine httpPingEngine = new HttpPingEngine();
-            return httpPingEngine.Ping(pingerSettings);
-
-        }
-        public bool Ping(TcpPingSettings pingerSettings)
-        {
-            TcpPingEngine tcpPingEngine = new TcpPingEngine();
-            return tcpPingEngine.Ping(pingerSettings);
-
-        }
-        public bool Ping(IcmpPingSettings pingerSettings)
-        {
-            IcmpPingEngine icmpPingEngine = new IcmpPingEngine();
-            return icmpPingEngine.Ping(pingerSettings);
-
-        }
-
-        
     }
 }

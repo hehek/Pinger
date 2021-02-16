@@ -5,20 +5,20 @@ using System.Text;
 
 namespace Pinger.Protocols
 {
-    internal class HttpPingEngine
+    internal class HttpPingEngine 
     {
-        private string targetHost { get; set; }
+        private string TargetHost { get; set; }
         private HttpStatusCode ExpectedStatus;
 
         public HttpPingEngine() { }
 
         public bool Ping(HttpPingSettings pingerSettings)
         {
-            targetHost = pingerSettings.Host;
+            TargetHost = pingerSettings.Host;
             ExpectedStatus = pingerSettings.Status;
             try
             {
-                var request = (HttpWebRequest)WebRequest.Create(targetHost);
+                var request = (HttpWebRequest)WebRequest.Create(TargetHost);
                 request.Timeout = 3000;
                 request.AllowAutoRedirect = false;
                 using var response = (HttpWebResponse)request.GetResponse();

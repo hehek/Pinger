@@ -20,11 +20,12 @@ namespace Pinger
         private CancellationTokenSource _cancelTokenSource;
         private CancellationToken _token;
         private TPingSettings _pingSettings;
+        private bool response;
 
-        public Pinger(IHostApplicationLifetime applicationLifetime, PingEngine engine)
+        public Pinger(IHostApplicationLifetime applicationLifetime, PingEngine engine, ILogger logger)
         {
             _applicationLifetime = applicationLifetime;
-
+            _logger = logger;
             _engine = engine;
         }
 
@@ -52,10 +53,9 @@ namespace Pinger
         {
             while (_status == PingerStatus.Started)
             {
-                //_logger.LogTrace(""); 
-                //TODO: Ping host and log
-                _engine.Ping(_pingSettings);
-
+                                 
+                response = _engine.Ping<TPingSettings>(_pingSettings);
+                _logger.LogTrace("{protocol}: {response}", _pingSettings.Protocol, response);
                 Thread.Sleep(_pingSettings.Timeout);
             }
         }
