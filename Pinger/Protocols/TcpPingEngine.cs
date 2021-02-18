@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
@@ -7,12 +8,18 @@ namespace Pinger.Protocols
 {
     public class TcpPingEngine
     {
+        private ILogger<PingEngine> _logger;
+        private TcpPingSettings _pingSettings;
+
         private string TargetHost { get; set; }
         private int TargetPort { get; set; }
 
-        public TcpPingEngine() { }
+        public TcpPingEngine(ILogger<PingEngine> logger) {
+            _logger = logger;
+        }
         public bool Ping(TcpPingSettings pingerSettings)
         {
+            _pingSettings = pingerSettings;
             TargetHost = pingerSettings.Host;
             TargetPort = pingerSettings.Port;
             bool conStatus;
@@ -24,11 +31,13 @@ namespace Pinger.Protocols
             {
                 socket.Connect(TargetHost, TargetPort);
             }
-            catch (SocketException)
+            catch (SocketException socketEx)
             {
+                _logger.LogError(socketEx.ToString());
             }
             catch (ArgumentNullException)
             {
+
             }
             finally
             {
@@ -42,10 +51,14 @@ namespace Pinger.Protocols
                     conStatus = false;
                 }
             }
+            LogInfo(conStatus);
             return conStatus;
 
         }
-
+        private void LogInfo(bool response)
+        {
+            _logger.LogInformation("{DateTime}  {protocol}: {response}", DateTime.Now, _pingSettings.Protocol, response);
+        }
 
     }
 }

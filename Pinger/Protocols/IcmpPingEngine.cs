@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Text;
@@ -7,31 +8,52 @@ namespace Pinger.Protocols
 {
     public class IcmpPingEngine
     {
+        private ILogger<PingEngine> _logger;
+        private IcmpPingSettings _pingSettings;
+
         private string TargetHost { get; set; }
+
+        public IcmpPingEngine(ILogger<PingEngine> logger)
+        {
+            _logger = logger;
+        }
 
 
         public bool Ping(IcmpPingSettings pingerSettings)
         {
+            _pingSettings = pingerSettings;
             TargetHost = pingerSettings.Host;
             var pinger = new Ping();
             try
             {
 
-                var reply = pinger.Send(TargetHost);
+                var reply = pinger.Send(TargetHost, pingerSettings.Timeout);
+                if(reply.Status == IPStatus.TimedOut)
+                {
+                    _logger.LogInformation("{DateTime}  {protocol}: TimedOut", DateTime.Now, _pingSettings.Protocol);
+                }
+                var response = (reply != null && reply.Status == IPStatus.Success);
+
                 pinger.Dispose();
-                return reply != null && reply.Status == IPStatus.Success;
+                LogInfo(response);
+                return response ;
             }
-            catch (UriFormatException)
+            catch (UriFormatException uriEx)
             {
+                _logger.LogInformation(uriEx.ToString());
                 return false;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogInformation(ex.ToString());
                 return false;
             }
-
+            
         }
-
+        private void LogInfo(bool response)
+        {
+            _logger.LogInformation("{DateTime}  {protocol}: {response}", DateTime.Now, _pingSettings.Protocol, response);
+        }
 
     }
 }

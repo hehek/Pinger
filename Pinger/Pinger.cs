@@ -17,12 +17,12 @@ namespace Pinger
         private readonly ILogger _logger;
         private readonly PingEngine _engine;
         private PingerStatus _status = PingerStatus.Stopped;
-        private CancellationTokenSource _cancelTokenSource;
+     
         private CancellationToken _token;
         private TPingSettings _pingSettings;
         private bool response;
 
-        public Pinger(IHostApplicationLifetime applicationLifetime, PingEngine engine, ILogger logger)
+        public Pinger(IHostApplicationLifetime applicationLifetime, PingEngine engine, ILogger<Pinger<TPingSettings>> logger)
         {
             _applicationLifetime = applicationLifetime;
             _logger = logger;
@@ -33,8 +33,8 @@ namespace Pinger
         {
             _pingSettings = pingSettings ?? throw new ArgumentNullException(nameof(pingSettings));
 
-            _cancelTokenSource = new CancellationTokenSource();
-            _token = _cancelTokenSource.Token;
+            //_cancelTokenSource = new CancellationTokenSource();
+            //_token = _cancelTokenSource.Token;
 
             _token = _applicationLifetime.ApplicationStopping;
 
@@ -45,8 +45,8 @@ namespace Pinger
         public void Stop()
         {
             _status = PingerStatus.Stopped;
-            _cancelTokenSource.Cancel();
-            _cancelTokenSource.Dispose();
+            //_cancelTokenSource.Cancel();
+            //_cancelTokenSource.Dispose();
         }
 
         private void IntervalPing()
@@ -55,9 +55,10 @@ namespace Pinger
             {
                                  
                 response = _engine.Ping<TPingSettings>(_pingSettings);
-                _logger.LogTrace("{protocol}: {response}", _pingSettings.Protocol, response);
                 Thread.Sleep(_pingSettings.Timeout);
             }
         }
+
+        
     }
 }

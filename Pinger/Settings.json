@@ -3,18 +3,18 @@
     {
       "Protocol": "HTTP",
       "Host": "dex-it.ru",
-      "Timeout": 2000,
-      "Status": 200
+     "Timeout": 1000,
+      "Status": 4000
     },
     {
       "Protocol": "TCP",
       "Host": "dex-it.ru",
-      "Timeout": 300
+      "Timeout": 4000
     },
     {
       "Protocol": "ICMP",
       "Host": "dex-it.ru",
-      "Timeout": 300
+      "Timeout": 4000
     }
   ]
 }
