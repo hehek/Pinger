@@ -6,9 +6,8 @@ namespace Pinger
 {
     public class FileLoggerConfiguration
     {
-       // public int EventId { get; set; }
         public LogLevel LogLevel { get; set; }
-        public string Path { get; set; } 
+        public string Path { get; set; }
 
     }
 }

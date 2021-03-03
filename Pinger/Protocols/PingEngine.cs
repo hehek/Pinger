@@ -1,40 +1,40 @@
-﻿using AutoMapper.Internal;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace Pinger.Protocols
 {
     public class PingEngine
     {
-        private ILogger<PingEngine> _logger;
+        private readonly IServiceProvider _serviceProvider;
 
-        public PingEngine(ILogger<PingEngine> logger)
+        public PingEngine(IServiceProvider serviceProvider)
         {
-            _logger = logger;
+            _serviceProvider = serviceProvider;
         }
 
         internal bool Ping<T>(BasePingSettings pingSettings)
         {
-            if (pingSettings is HttpPingSettings httpPS)
+            switch (pingSettings)
             {
-                HttpPingEngine httpPingEngine = new HttpPingEngine(_logger);
-                return httpPingEngine.Ping(httpPS);
-            }
-            else if(pingSettings is TcpPingSettings tcpPS)
-            {
-                TcpPingEngine tcpPingEngine = new TcpPingEngine(_logger);
-                return tcpPingEngine.Ping(tcpPS);
-            }
-            else if(pingSettings is IcmpPingSettings icmpPS)
-            {
-                IcmpPingEngine icmpPingEngine = new IcmpPingEngine(_logger);
-                return icmpPingEngine.Ping(icmpPS);
-            }
-            else
-            {
-                throw new NotImplementedException();
+                case HttpPingSettings httpPs:
+                {
+                    var httpPingEngine = _serviceProvider.GetService<HttpPingEngine>();
+                    return httpPingEngine != null && httpPingEngine.Ping(httpPs);
+                }
+                case TcpPingSettings tcpPs:
+                {
+                    var tcpPingEngine = _serviceProvider.GetService<TcpPingEngine>();
+                    return tcpPingEngine != null && tcpPingEngine.Ping(tcpPs);
+                }
+                case IcmpPingSettings icmpPs:
+                {
+                    var icmpPingEngine = _serviceProvider.GetService<IcmpPingEngine>();
+                    return icmpPingEngine != null && icmpPingEngine.Ping(icmpPs);
+                }
+                default:
+                    throw new NotImplementedException();
             }
         }
     }

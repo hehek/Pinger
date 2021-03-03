@@ -10,9 +10,8 @@ namespace Pinger.Protocols
 {
     internal class HttpPingEngine 
     {
-        private string TargetHost { get; set; }
-        private HttpStatusCode ExpectedStatus;
-        private ILogger<PingEngine> _logger;
+        private HttpStatusCode _expectedStatus;
+        private readonly ILogger<PingEngine> _logger;
         private HttpPingSettings _pingSettings;
 
         public HttpPingEngine(ILogger<PingEngine> logger) {
@@ -24,22 +23,22 @@ namespace Pinger.Protocols
             _pingSettings = pingerSettings;
             if (!Regex.IsMatch(pingerSettings.Host, @"^https?:\/\/", RegexOptions.IgnoreCase))
                 pingerSettings.Host = "http://" + pingerSettings.Host;          
-            ExpectedStatus = pingerSettings.Status;
+            _expectedStatus = pingerSettings.Status;
             try
             {
                 var request = (HttpWebRequest)WebRequest.Create(pingerSettings.Host);
                 request.Timeout = pingerSettings.Timeout;
                 request.AllowAutoRedirect = true;
                 using var response = (HttpWebResponse)request.GetResponse();
-                LogInfo(response.StatusCode == ExpectedStatus);
-                return response.StatusCode == ExpectedStatus;
+                LogInfo(response.StatusCode == _expectedStatus);
+                return response.StatusCode == _expectedStatus;
             }
             catch (UriFormatException uriEx)
             {
                 _logger.LogError(uriEx.ToString());
                 return false;
             }
-            catch (Exception ex)
+            catch (NullReferenceException ex)
             {
                 _logger.LogError(ex.ToString());
                 return false;

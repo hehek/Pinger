@@ -3,16 +3,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Pinger.Protocols;
-using System;
 using System.Collections.Generic;
 using System.IO;
 
 
 namespace Pinger
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
         }

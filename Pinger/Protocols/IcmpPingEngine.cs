@@ -8,7 +8,7 @@ namespace Pinger.Protocols
 {
     public class IcmpPingEngine
     {
-        private ILogger<PingEngine> _logger;
+        private readonly ILogger<PingEngine> _logger;
         private IcmpPingSettings _pingSettings;
 
         private string TargetHost { get; set; }
@@ -28,7 +28,7 @@ namespace Pinger.Protocols
             {
 
                 var reply = pinger.Send(TargetHost, pingerSettings.Timeout);
-                if(reply.Status == IPStatus.TimedOut)
+                if(reply != null && reply.Status == IPStatus.TimedOut)
                 {
                     _logger.LogInformation("{DateTime}  {protocol}: TimedOut", DateTime.Now, _pingSettings.Protocol);
                 }
@@ -43,7 +43,7 @@ namespace Pinger.Protocols
                 _logger.LogInformation(uriEx.ToString());
                 return false;
             }
-            catch (Exception ex)
+            catch (NullReferenceException ex)
             {
                 _logger.LogInformation(ex.ToString());
                 return false;

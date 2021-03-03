@@ -9,7 +9,8 @@ namespace Pinger
     public class FileLoggerProvider : ILoggerProvider
     {
         private readonly FileLoggerConfiguration _config;
-        private readonly ConcurrentDictionary<string, FileLogger> _loggers =
+
+        internal readonly ConcurrentDictionary<string, FileLogger> Loggers =
             new ConcurrentDictionary<string, FileLogger>();
 
         public FileLoggerProvider(FileLoggerConfiguration config)
@@ -21,6 +22,6 @@ namespace Pinger
             return new FileLogger(_config);
         }
 
-        public void Dispose() => _loggers.Clear();
+        public void Dispose() => Loggers.Clear();
     }
 }

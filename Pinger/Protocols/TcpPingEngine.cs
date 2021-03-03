@@ -8,7 +8,7 @@ namespace Pinger.Protocols
 {
     public class TcpPingEngine
     {
-        private ILogger<PingEngine> _logger;
+        private readonly ILogger<PingEngine> _logger;
         private TcpPingSettings _pingSettings;
 
         private string TargetHost { get; set; }
@@ -36,6 +36,10 @@ namespace Pinger.Protocols
                 _logger.LogError(socketEx.ToString());
             }
             catch (ArgumentNullException)
+            {
+
+            }
+            catch (NullReferenceException)
             {
 
             }

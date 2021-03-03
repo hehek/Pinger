@@ -8,7 +8,7 @@ namespace Pinger
 {
     public class FileLogger : ILogger
     {
-        private static object _lock = new object();
+        private static readonly object Lock = new object();
         private readonly FileLoggerConfiguration _config;
         public FileLogger(FileLoggerConfiguration config)
         {
@@ -25,7 +25,7 @@ namespace Pinger
         {
             if (formatter != null)
             {
-                lock (_lock)
+                lock (Lock)
                 {
                     File.AppendAllText(_config.Path, formatter(state, exception) + Environment.NewLine);
                 }
