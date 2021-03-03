@@ -1,17 +1,14 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Concurrent;
+using Microsoft.Extensions.Logging;
 
-namespace Pinger
+namespace Pinger.FileLogger
 {
     public class FileLoggerProvider : ILoggerProvider
     {
         private readonly FileLoggerConfiguration _config;
 
-        internal readonly ConcurrentDictionary<string, FileLogger> Loggers =
-            new ConcurrentDictionary<string, FileLogger>();
+        internal readonly ConcurrentDictionary<string, Pinger.FileLogger.FileLogger> Loggers =
+            new ConcurrentDictionary<string, Pinger.FileLogger.FileLogger>();
 
         public FileLoggerProvider(FileLoggerConfiguration config)
         {
@@ -19,7 +16,7 @@ namespace Pinger
         }
         public ILogger CreateLogger(string categoryName)
         {
-            return new FileLogger(_config);
+            return new Pinger.FileLogger.FileLogger(_config);
         }
 
         public void Dispose() => Loggers.Clear();

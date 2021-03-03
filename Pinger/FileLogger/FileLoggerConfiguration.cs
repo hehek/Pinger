@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using System.IO;
-using System.Text;
 
-namespace Pinger
+namespace Pinger.FileLogger
 {
     public class FileLoggerConfiguration
     {

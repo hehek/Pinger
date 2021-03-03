@@ -1,10 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Text;
+using Microsoft.Extensions.Logging;
 
-namespace Pinger
+namespace Pinger.FileLogger
 {
     public class FileLogger : ILogger
     {

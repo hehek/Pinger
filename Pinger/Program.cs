@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Pinger.Protocols;
 using System.Collections.Generic;
 using System.IO;
+using Pinger.FileLogger;
 
 
 namespace Pinger
@@ -61,7 +62,7 @@ namespace Pinger
                     services.AddScoped<HttpPingEngine>();
                     services.AddScoped<TcpPingEngine>();
                     services.AddScoped<IcmpPingEngine>();
-                    services.AddTransient<FileLogger>();
+                    services.AddTransient<FileLogger.FileLogger>();
                     services.AddHostedService<Start>();
                 });
     }

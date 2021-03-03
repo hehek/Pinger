@@ -34,7 +34,7 @@ namespace Pinger
                                                        + ps.Status + "\n"
                                                        + ps.Timeout);
                         var pinger = _serviceProvider.GetService<Pinger<HttpPingSettings>>();
-                        pinger.Start(ps);
+                        pinger?.Start(ps);
                         break;
                     }
                     case TcpPingSettings tcpPS:
@@ -44,7 +44,7 @@ namespace Pinger
                                                           + tcpPS.Port + "\n"
                                                           + tcpPS.Timeout);
                         var pinger = _serviceProvider.GetService<Pinger<TcpPingSettings>>();
-                        pinger.Start(tcpPS);
+                        pinger?.Start(tcpPS);
                         break;
                     }
                     case IcmpPingSettings icmpPS:
@@ -53,7 +53,7 @@ namespace Pinger
                                                            + icmpPS.Protocol + "\n"
                                                            + icmpPS.Timeout);
                         var pinger = _serviceProvider.GetService<Pinger<IcmpPingSettings>>();
-                        pinger.Start(icmpPS);
+                        pinger?.Start(icmpPS);
                         break;
                     }
                 }
